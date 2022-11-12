@@ -1,8 +1,12 @@
 # Ton fun parser
-## Up local for development
+## Up for development
+### Install
 ```shell
-yarn install
-cp .env.local .env
+yarn install && yarn env
+```
+
+### Start
+```shell
 yarn start
 ```
 

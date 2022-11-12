@@ -6,6 +6,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "env": "cpy .env.local . --rename .env",
     "start": "ts-node app"
   },
   "dependencies": {
@@ -19,5 +20,8 @@
     "koa-context-validator": "^1.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "cpy-cli": "^4.2.0"
   }
 }
