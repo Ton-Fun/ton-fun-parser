@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  tonFunParser:
+    image: ghcr.io/kokkekpek/ton-fun-parser:latest
+    container_name: tonFunParser
+    environment:
+      - PORT=${PORT}
+      - BETS_MAX_LIMIT=${BETS_MAX_LIMIT}
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.tonFunParser.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.tonFunParser.entrypoints=web
+
+      - traefik.http.routers.tonFunParserSecure.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.tonFunParserSecure.entrypoints=webSecure
+      - traefik.http.routers.tonFunParserSecure.tls.certresolver=letsEncrypt
+
+      - traefik.http.services.tonFunParser.loadbalancer.server.port=${PORT}
+    networks:
+      - traefik
+networks:
+  traefik:
+    external: true
+    name: traefik
