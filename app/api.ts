@@ -42,11 +42,8 @@ export default (logger: Logger) => {
         })
 
     try {
-        app.use(router.middleware())
-            .listen(PORT)
+        app.use(router.middleware()).listen(PORT)
     } catch (e) {
-        console.log(e)
-        console.log(logger)
-        console.log('AAA')
+        logger.error(e)
     }
 }
