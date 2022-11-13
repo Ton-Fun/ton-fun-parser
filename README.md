@@ -22,3 +22,7 @@ docker compose --env-file .env.local up
 
 ## Deploy on server
 Auto [GitHub action](https://github.com/kokkekpek/ton-fun-parser/actions/workflows/deploy.yml)
+
+Secrets
+* `SSH_DEPLOY_PRIVATE_KEY`
+* `MONGO_INITDB_ROOT_PASSWORD`

@@ -1,8 +1,26 @@
 version: "3.9"
 services:
+
+  mongo:
+    image: mongo:4.4.17
+    container_name: mongo
+    restart: always
+    command: ['--logpath', '/var/log/mongodb/mongo.log']
+    volumes:
+      - ton-fun-parser-mongo-db:/data/db
+      - ton-fun-parser-mongo-log:/var/log/mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    networks:
+      - parser
+
   tonFunParser:
     image: ghcr.io/kokkekpek/ton-fun-parser:latest
     container_name: tonFunParser
+    restart: always
+    volumes:
+      - ton-fun-parser-log:/app/log
     environment:
       - PORT=${PORT}
       - BETS_MAX_LIMIT=${BETS_MAX_LIMIT}
@@ -19,7 +37,15 @@ services:
       - traefik.http.services.tonFunParser.loadbalancer.server.port=${PORT}
     networks:
       - traefik
+      - parser
+
 networks:
+  parser:
   traefik:
     external: true
     name: traefik
+
+volumes:
+  ton-fun-parser-mongo-db:
+  ton-fun-parser-mongo-log:
+  ton-fun-parser-log:
