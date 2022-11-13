@@ -1,5 +1,6 @@
 version: "3.9"
 services:
+
   mongo:
     image: mongo:4.4.17
     container_name: mongo
@@ -13,6 +14,14 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+  mongo-express:
+    image: mongo-express:1.0.0-alpha
+    restart: always
+    ports:
+      - ${MONGO_EXPRESS_PORT}:8081
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017
 
 volumes:
   ton-fun-parser-mongo-db:

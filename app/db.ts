@@ -14,10 +14,8 @@ export default async (logger: Logger): Promise<MongoClient> => {
         await client.connect()
         await client.db('admin').command({ ping: 1 })
         logger.info('Connected successfully to database')
-    } catch (e) {
-        logger.error(console.dir)
-    } finally {
-        await client.close()
+    } catch (e: any) {
+        logger.error(e.stack)
     }
 
     return client

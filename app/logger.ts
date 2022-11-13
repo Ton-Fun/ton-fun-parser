@@ -1,4 +1,4 @@
-import winston, {Logger} from "winston";
+import winston, {Logger} from 'winston'
 
 export default (): Logger => {
     const info: string = 'log/parser.log'
