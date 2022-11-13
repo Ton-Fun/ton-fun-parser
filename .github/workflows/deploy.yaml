@@ -59,7 +59,7 @@ jobs:
           script: |
             cd /srv/${{ github.repository }}
             echo ${{ secrets.GITHUB_TOKEN }} | docker login https://ghcr.io --username ${{ github.repository_owner }} --password-stdin
-            MONGO_INITDB_ROOT_PASSWORD=${{secrets.MONGO_INITDB_ROOT_PASSWORD}}
+            export MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
             docker compose -f docker-compose.yaml --env-file .env.prod pull
             docker compose -f docker-compose.yaml --env-file .env.prod down
             docker compose -f docker-compose.yaml --env-file .env.prod up -d
