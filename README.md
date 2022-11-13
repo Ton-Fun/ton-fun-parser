@@ -5,13 +5,17 @@
 yarn install && yarn env
 ```
 
+```shell
+docker compose -f docker-compose.local.yaml --env-file .env.local up
+```
+
 ### Start
 ```shell
 yarn start
 ```
 
-## Up local using docker compose
-[Up infrastructure](https://github.com/kokkekpek/ton-fun-infrastructure)
+## Up local using [docker image from GitHub](https://github.com/kokkekpek/ton-fun-parser/pkgs/container/ton-fun-parser)
+[Up infrastructure](https://github.com/kokkekpek/ton-fun-infrastructure#readme)
 ```shell
 docker compose --env-file .env.local up
 ```

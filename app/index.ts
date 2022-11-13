@@ -4,6 +4,7 @@ import {Bet, stubBets} from './bets'
 import Joi from 'joi'
 import validator from 'koa-context-validator'
 import * as dotenv from 'dotenv'
+import {run as runParser} from './parser'
 
 dotenv.config()
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3000
@@ -11,6 +12,7 @@ const BETS_MAX_LIMIT: number = process.env.BETS_MAX_LIMIT ? parseInt(process.env
 
 const app: Koa = new Koa()
 const router: Router = new Router()
+runParser().catch(console.dir)
 
 router.get('/health', (ctx: ExtendableContext) => {
     ctx.body = { success: 'OK' }
