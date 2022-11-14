@@ -29,7 +29,10 @@ export default (logger: Logger, mongoClient: MongoClient) => {
 
     router.get('/summary', async (ctx: ExtendableContext) => {
         const players: number = (await betsCollection.distinct('address')).length
+        const state: State = await stateCollection.findOne() ?? defaultState
         const summary = await betsCollection.aggregate([{
+            $match: {lt: {$lte: state.parserTargetLt}}
+        }, {
             $group: {
                 _id: '',
                 betsValue: {$sum: '$value'},
@@ -70,7 +73,11 @@ export default (logger: Logger, mongoClient: MongoClient) => {
             const sort: string = ctx.query.sort ? ctx.query.sort.toString() : 'asc'
             const sortingObject: { $sort: any } = {$sort: {}}
             sortingObject.$sort[orderBy] = (sort === 'asc') ? 1 : -1
+
+            const state: State = await stateCollection.findOne() ?? defaultState
             ctx.body = await betsCollection.aggregate([{
+                $match: {lt: {$lte: state.parserTargetLt}}
+            }, {
                 $group: {
                     _id: '$address',
                     betsValue: {$sum: '$value'},
@@ -103,8 +110,9 @@ export default (logger: Logger, mongoClient: MongoClient) => {
 
     router.get('/player/:address', async (ctx: ExtendableContext & RouterParamContext) => {
         const address: string = ctx.params.address
+        const state: State = await stateCollection.findOne() ?? defaultState
         const players = await betsCollection.aggregate([{
-            $match: {'address': {$eq: address}}
+            $match: {address: {$eq: address}, lt: {$lte: state.parserTargetLt}}
         }, {
             $group: {
                 _id: '$address',
