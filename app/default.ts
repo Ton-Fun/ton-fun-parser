@@ -1,10 +1,11 @@
 import {State} from './types'
+import {Long} from 'mongodb'
 
 export const defaultState: State = {
-    maxLt: '0',
+    maxLt: new Long(0),
     maxHash: '',
-    parserLt: '0',
+    parserLt: new Long(0),
     parseHash: '',
-    parserTargetLt: '0',
+    parserTargetLt: new Long(0),
     parserTargetHash: ''
 }

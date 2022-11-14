@@ -27,6 +27,122 @@ export default (logger: Logger, mongoClient: MongoClient) => {
         ctx.body = { state, scraped }
     })
 
+    router.get('/summary', async (ctx: ExtendableContext) => {
+        const players: number = (await betsCollection.distinct('address')).length
+        const summary = await betsCollection.aggregate([{
+            $group: {
+                _id: '',
+                betsValue: {$sum: '$value'},
+                winsValue: {$sum: {$cond: ['$win', {$multiply: ['$value', 2]}, 0]}},
+                bets: {$sum: 1},
+                wins: {$sum: {$cond: ['$win', 1, 0]}},
+                maxBet: {$max: '$value'},
+                maxWin: {$max: {$cond: ['$win', {$multiply: ['$value', 2]}, 0]}},
+                firstBetTimestamp: {$min: '$time'},
+                lastBetTimestamp: {$max: '$time'}
+            }
+        }, {
+            $project: {
+                _id: 0
+            }
+        }]).toArray()
+        ctx.body = {players, ...summary[0]}
+    })
+
+    router.get('/players',
+        validator({
+            query: Joi.object().keys({
+                orderBy: Joi.string().valid(
+                    'betsValue',
+                    'winsValue',
+                    'bets',
+                    'wins',
+                    'maxBet',
+                    'maxWin',
+                    'firstBetTimestamp',
+                    'lastBetTimestamp',
+                    'profit'
+                ),
+                sort: Joi.string().valid('asc', 'desc')
+            })
+        }), async (ctx: ExtendableContext) => {
+            const orderBy: string = ctx.query.orderBy ? ctx.query.orderBy.toString() : 'betsValue'
+            const sort: string = ctx.query.sort ? ctx.query.sort.toString() : 'asc'
+            const sortingObject: { $sort: any } = {$sort: {}}
+            sortingObject.$sort[orderBy] = (sort === 'asc') ? 1 : -1
+            ctx.body = await betsCollection.aggregate([{
+                $group: {
+                    _id: '$address',
+                    betsValue: {$sum: '$value'},
+                    winsValue: {$sum: {$cond: ['$win', {$multiply: ['$value', 2]}, 0]}},
+                    bets: {$sum: 1},
+                    wins: {$sum: {$cond: ['$win', 1, 0]}},
+                    maxBet: {$max: '$value'},
+                    maxWin: {$max: {$cond: ['$win', {$multiply: ['$value', 2]}, 0]}},
+                    firstBetTimestamp: {$min: '$time'},
+                    lastBetTimestamp: {$max: '$time'}
+                }
+            }, {
+                $project: {
+                    _id: 0,
+                    address: '$_id',
+                    betsValue: 1,
+                    winsValue: 1,
+                    bets: 1,
+                    wins: 1,
+                    maxBet: 1,
+                    maxWin: 1,
+                    firstBetTimestamp: 1,
+                    lastBetTimestamp: 1,
+                    profit: {$subtract: ['$winsValue', '$betsValue']}
+                }
+            },
+                sortingObject
+            ]).toArray()
+        })
+
+    router.get('/player/:address', async (ctx: ExtendableContext & RouterParamContext) => {
+        const address: string = ctx.params.address
+        const players = await betsCollection.aggregate([{
+            $match: {'address': {$eq: address}}
+        }, {
+            $group: {
+                _id: '$address',
+                betsValue: {$sum: '$value'},
+                winsValue: {$sum: {$cond: ['$win', {$multiply: ['$value', 2]}, 0]}},
+                bets: {$sum: 1},
+                wins: {$sum: {$cond: ['$win', 1, 0]}},
+                maxBet: {$max: '$value'},
+                maxWin: {$max: {$cond: ['$win', {$multiply: ['$value', 2]}, 0]}},
+                firstBetTimestamp: {$min: '$time'},
+                lastBetTimestamp: {$max: '$time'}
+            }
+        }, {
+            $project: {
+                _id: 0,
+                address: '$_id',
+                betsValue: 1,
+                winsValue: 1,
+                bets: 1,
+                wins: 1,
+                maxBet: 1,
+                maxWin: 1,
+                firstBetTimestamp: 1,
+                lastBetTimestamp: 1,
+                profit: {$subtract: ['$winsValue', '$betsValue']}
+            }
+        }
+        ]).toArray()
+        const bets: Bet[] = await betsCollection
+            .find<Bet>({address: {$eq: address}})
+            .project<Bet>({_id: 0})
+            .toArray()
+        ctx.body = {
+            player: players[0] ?? [],
+            bets
+        }
+    })
+
     router.get('/bets',
         validator({
             query: Joi.object().keys({

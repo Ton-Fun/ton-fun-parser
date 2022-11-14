@@ -1,17 +1,19 @@
+import {Long} from 'mongodb'
+
 export type Bet = {
-    lt: string
+    lt: Long
     hash: string
-    time: number
+    time: Long
     address: string
-    value: string
+    value: Long
     win: boolean
 }
 
 export type State = {
-    maxLt: string
+    maxLt: Long
     maxHash: string
-    parserLt: string
+    parserLt: Long
     parseHash: string
-    parserTargetLt: string
+    parserTargetLt: Long
     parserTargetHash: string
 }

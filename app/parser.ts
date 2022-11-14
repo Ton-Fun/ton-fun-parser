@@ -1,4 +1,4 @@
-import {Collection, Db, MongoClient} from 'mongodb'
+import {Collection, Db, Long, MongoClient} from 'mongodb'
 import {Address, Cell, Slice, TonClient, TonMessageData, TonTransaction} from 'ton'
 import {Logger} from 'winston'
 import {delay} from 'ton/dist/utils/time'
@@ -38,12 +38,12 @@ export default async (logger: Logger, mongoClient: MongoClient) => {
     async function parse(): Promise<void> {
         const transactions: TonTransaction[] = await tonClient.getTransactions(contract, {
             limit: PARSER_LIMIT,
-            lt: state.parserLt,
+            lt: state.parserLt.toString(),
             hash: state.parseHash
         })
 
         if (!transactions.length) {
-            newState.parserLt = '0'
+            newState.parserLt = new Long(0)
             newState.parseHash = ''
             newState.parserTargetLt = state.maxLt
             newState.parserTargetHash = state.maxHash
@@ -53,19 +53,19 @@ export default async (logger: Logger, mongoClient: MongoClient) => {
         const filteredTransactions: TonTransaction[] = transactions.filter((transaction: TonTransaction) => {
             return transaction.inMessage?.source &&
                 transaction.inMessage?.source.toString() === echoContract.toString() &&
-                BigInt(transaction.id.lt) > BigInt(state.parserTargetLt)
+                (new Long(transaction.id.lt)).gt(state.parserTargetLt)
         })
 
         filteredTransactions.forEach((transaction: TonTransaction) => {
-            const lt: string = transaction.id.lt
+            const lt: Long = new Long(transaction.id.lt)
             const hash: string = transaction.id.hash
-            const time: number = transaction.time
+            const time: Long = new Long(transaction.time)
             // @ts-ignore
             const buffer: Buffer = (transaction.inMessage.body as TonMessageData).data
             const slice: Slice = Slice.fromCell(Cell.fromBoc(buffer)[0])
             const addressOrNull: Address | null = slice.readAddress()
             const address: string = addressOrNull ? addressOrNull.toFriendly() : ''
-            const value: string = slice.readCoins().toString()
+            const value: Long = new Long(slice.readCoins().toString())
             const win: boolean = transaction.outMessages.length === 1
             const bet: Bet = {
                 lt,
@@ -80,19 +80,19 @@ export default async (logger: Logger, mongoClient: MongoClient) => {
         })
 
         const maxTransaction: TonTransaction = transactions[0]
-        if (BigInt(maxTransaction.id.lt) > BigInt(state.maxLt)) {
-            newState.maxLt = maxTransaction.id.lt
+        if ((new Long(maxTransaction.id.lt)).gt(state.maxLt)) {
+            newState.maxLt = new Long(maxTransaction.id.lt)
             newState.maxHash = maxTransaction.id.hash
         }
 
         const minTransaction: TonTransaction = transactions[transactions.length - 1]
-        if (BigInt(minTransaction.id.lt) <= BigInt(state.parserTargetLt) || transactions.length < PARSER_LIMIT) {
-            newState.parserLt = '0'
+        if ((new Long(minTransaction.id.lt)).lte(state.parserTargetLt) || transactions.length < PARSER_LIMIT) {
+            newState.parserLt = new Long(0)
             newState.parseHash = ''
             newState.parserTargetLt = newState.maxLt
             newState.parserTargetHash = newState.maxHash
         } else {
-            newState.parserLt = minTransaction.id.lt
+            newState.parserLt = new Long(minTransaction.id.lt)
             newState.parseHash = minTransaction.id.hash
         }
     }
