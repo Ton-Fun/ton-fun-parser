@@ -27,7 +27,7 @@ Secrets
 * `SSH_DEPLOY_PRIVATE_KEY`
 * `MONGO_INITDB_ROOT_PASSWORD`
 
-## Methods
+## API
 ### GET `/health`
 ```shell
 curl -s https://tonbot.fun/health | jq
