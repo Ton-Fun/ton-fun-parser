@@ -18,13 +18,13 @@ export default (logger: Logger, mongoClient: MongoClient) => {
     const betsCollection: Collection<Bet> = database.collection('bets')
 
     router.get('/health', (ctx: ExtendableContext) => {
-        ctx.body = { success: 'OK' }
+        ctx.body = {success: 'OK'}
     })
 
     router.get('/state', async (ctx: ExtendableContext) => {
         const state: State = await stateCollection.findOne() ?? defaultState
         const scraped: number = await betsCollection.countDocuments()
-        ctx.body = { state, scraped }
+        ctx.body = {state, scraped}
     })
 
     router.get('/summary', async (ctx: ExtendableContext) => {
@@ -159,13 +159,13 @@ export default (logger: Logger, mongoClient: MongoClient) => {
                 .skip(offset)
                 .limit(limit)
                 .toArray()
-            ctx.body = { bets, total }
+            ctx.body = {bets, total}
         })
 
     router.get('/bets/total', async (ctx: ExtendableContext) => {
         const state: State = await stateCollection.findOne() ?? defaultState
         const total: number = await betsCollection.countDocuments({lt: {$lte: state.parserTargetLt}})
-        ctx.body = { total }
+        ctx.body = {total}
     })
 
     try {
