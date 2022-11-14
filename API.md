@@ -52,7 +52,22 @@ curl -s https://parser.tonbot.fun/state | jq
 ```
 
 
-## GET `/players`
+## GET `/players?orderBy=<orderBy>&sort=<sort>`
+
+* `orderBy` - Available values:
+  * `betsValue`
+  * `winsValue`
+  * `bets`
+  * `wins`
+  * `maxBet`
+  * `maxWin`
+  * `firstBetTimestamp`
+  * `lastBetTimestamp`
+  * `profit`
+* `sort` - Available values:
+  * `asc`
+  * `desc`
+
 ```shell
 curl -s https://parser.tonbot.fun/players | jq
 ```
