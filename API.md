@@ -18,16 +18,16 @@ curl -s https://parser.tonbot.fun/state | jq
 
 ```json
 {
-    "state": {
-        "_id": "6371c1645d9c48d28115aadc",
-        "maxHash": "rTdmPuxq8q3HMon3rf3acikphIjsjKhojK7pQxiE4ys=",
-        "maxLt": 32836213000001,
-        "parseHash": "",
-        "parserLt": 0,
-        "parserTargetHash": "rTdmPuxq8q3HMon3rf3acikphIjsjKhojK7pQxiE4ys=",
-        "parserTargetLt": 32836213000001
-    },
-    "scraped": 7725
+  "state": {
+    "_id": "6371c1645d9c48d28115aadc",
+    "maxHash": "rTdmPuxq8q3HMon3rf3acikphIjsjKhojK7pQxiE4ys=",
+    "maxLt": 32836213000001,
+    "parseHash": "",
+    "parserLt": 0,
+    "parserTargetHash": "rTdmPuxq8q3HMon3rf3acikphIjsjKhojK7pQxiE4ys=",
+    "parserTargetLt": 32836213000001
+  },
+  "scraped": 7725
 }
 ```
 
@@ -39,15 +39,15 @@ curl -s https://parser.tonbot.fun/state | jq
 
 ```json
 {
-    "players": 94,
-    "betsValue": 30076828219605,
-    "winsValue": 23964705221624,
-    "bets": 7725,
-    "wins": 3118,
-    "maxBet": 800000000000,
-    "maxWin": 1600000000000,
-    "firstBetTimestamp": 1666997915,
-    "lastBetTimestamp": 1668390910
+  "players": 94,
+  "betsValue": 30076828219605,
+  "winsValue": 23964705221624,
+  "bets": 7725,
+  "wins": 3118,
+  "maxBet": 800000000000,
+  "maxWin": 1600000000000,
+  "firstBetTimestamp": 1666997915,
+  "lastBetTimestamp": 1668390910
 }
 ```
 
@@ -74,30 +74,30 @@ curl -s https://parser.tonbot.fun/players | jq
 
 ```json
 [
-    {
-        "betsValue": 2059170000000,
-        "winsValue": 1108760000000,
-        "bets": 148,
-        "wins": 61,
-        "maxBet": 390000000000,
-        "maxWin": 200000000000,
-        "firstBetTimestamp": 1667165124,
-        "lastBetTimestamp": 1668369935,
-        "address": "EQB5dU4DfFVlE5N_VQHmNAo3EXRBhEnBqxp26Y5zFiphWcle",
-        "profit": -950410000000
-    },
-    {
-        "betsValue": 18057530000000,
-        "winsValue": 14551360000000,
-        "bets": 6104,
-        "wins": 2459,
-        "maxBet": 3010000000,
-        "maxWin": 6020000000,
-        "firstBetTimestamp": 1667000862,
-        "lastBetTimestamp": 1667004763,
-        "address": "EQCztAMYomEAUAadH4X-Vz0oygMIPvvxYJOoxUQkpLqpsrji",
-        "profit": -3506170000000
-    }
+  {
+    "betsValue": 2059170000000,
+    "winsValue": 1108760000000,
+    "bets": 148,
+    "wins": 61,
+    "maxBet": 390000000000,
+    "maxWin": 200000000000,
+    "firstBetTimestamp": 1667165124,
+    "lastBetTimestamp": 1668369935,
+    "address": "EQB5dU4DfFVlE5N_VQHmNAo3EXRBhEnBqxp26Y5zFiphWcle",
+    "profit": -950410000000
+  },
+  {
+    "betsValue": 18057530000000,
+    "winsValue": 14551360000000,
+    "bets": 6104,
+    "wins": 2459,
+    "maxBet": 3010000000,
+    "maxWin": 6020000000,
+    "firstBetTimestamp": 1667000862,
+    "lastBetTimestamp": 1667004763,
+    "address": "EQCztAMYomEAUAadH4X-Vz0oygMIPvvxYJOoxUQkpLqpsrji",
+    "profit": -3506170000000
+  }
 ]
 ```
 
