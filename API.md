@@ -34,7 +34,7 @@ curl -s https://parser.tonbot.fun/state | jq
 
 ## GET `/summary`
 ```shell
-curl -s https://parser.tonbot.fun/state | jq
+curl -s https://parser.tonbot.fun/summary | jq
 ```
 
 ```json
