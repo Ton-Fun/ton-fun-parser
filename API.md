@@ -159,7 +159,6 @@ curl -s "https://parser.tonbot.fun/bets?offset=0&limit=2" | jq
 {
   "bets": [
     {
-      "_id": "6371c2335d9c48d28115e955",
       "lt": 32403347000001,
       "address": "EQB9DjoKb6di-LGbXVWf5wq_jH5SE-lCx09fMcVmHQNtDqke",
       "hash": "moQRkHoqjMGm8ogcTD0FDS8LrMVBZx0xr2XrtjnU6AI=",
@@ -168,7 +167,6 @@ curl -s "https://parser.tonbot.fun/bets?offset=0&limit=2" | jq
       "win": false
     },
     {
-      "_id": "6371c2335d9c48d28115e956",
       "lt": 32404211000001,
       "address": "EQD2gw6aNFN3Dv61iM-zMhagsQJDj6ZdE0nVl21FFLXWkoXO",
       "hash": "bs5omURddLXSUqXCHYivpxZviKs+ze2KJhomGOGUvyM=",

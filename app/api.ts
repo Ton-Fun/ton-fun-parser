@@ -155,9 +155,11 @@ export default (logger: Logger, mongoClient: MongoClient) => {
             const limit: number = ctx.query.limit ? parseInt(ctx.query.limit.toString()) : BETS_MAX_LIMIT
             const state: State = await stateCollection.findOne() ?? defaultState
             const total: number = await betsCollection.countDocuments({lt: {$lte: state.parserTargetLt}})
-            const bets: Bet[] = await betsCollection.find({lt: {$lte: state.parserTargetLt}})
+            const bets: Bet[] = await betsCollection
+                .find({lt: {$lte: state.parserTargetLt}})
                 .skip(offset)
                 .limit(limit)
+                .project<Bet>({_id: 0})
                 .toArray()
             ctx.body = {bets, total}
         })
