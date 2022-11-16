@@ -76,7 +76,7 @@ export default async (logger: Logger, mongoClient: MongoClient) => {
                 win
             }
             betsCollection.updateOne({lt: {$eq: bet.lt}}, {$set: bet}, {upsert: true})
-            logger.info('New bet', bet)
+            logger.info('New bet', {data: bet})
         })
 
         const maxTransaction: TonTransaction = transactions[0]
