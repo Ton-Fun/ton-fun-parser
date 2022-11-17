@@ -284,7 +284,7 @@ Return bets in ordered by parser. Use it if you want to process bets. Response o
 * `limit` from `1` to `1000` by default
 
 ```shell
-curl -s "https://parser.tonbot.fun/bets/steam?offset=0&limit=2" | jq
+curl -s "https://parser.tonbot.fun/bets/stream?offset=0&limit=2" | jq
 ```
 
 ```json
