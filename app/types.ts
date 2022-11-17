@@ -7,6 +7,7 @@ export type Bet = {
     address: string
     value: Long
     win: boolean
+    version: string
 }
 
 export type State = {
@@ -16,4 +17,7 @@ export type State = {
     parseHash: string
     parserTargetLt: Long
     parserTargetHash: string
+    version: string
 }
+
+export type ParserVersion = '1' | '2'
