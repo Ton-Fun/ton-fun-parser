@@ -20,7 +20,7 @@ export default (router: Router, db: Db) => {
         async (ctx: ExtendableContext & RouterParamContext) => {
             const offset: number = ctx.query.offset ? parseInt(ctx.query.offset.toString()) : 0
             const limit: number = ctx.query.limit ? parseInt(ctx.query.limit.toString()) : BETS_MAX_LIMIT
-            const filter: any = allVersionsFilter(db)
+            const filter: any = await allVersionsFilter(db)
             ctx.body = await db.collection<Bet>('bets')
                 .find(filter)
                 .sort('lt', 'asc')
@@ -40,7 +40,7 @@ export default (router: Router, db: Db) => {
         async (ctx: ExtendableContext & RouterParamContext) => {
             const offset: number = ctx.query.offset ? parseInt(ctx.query.offset.toString()) : 0
             const limit: number = ctx.query.limit ? parseInt(ctx.query.limit.toString()) : BETS_MAX_LIMIT
-            const filter: any = allVersionsFilter(db)
+            const filter: any = await allVersionsFilter(db)
             ctx.body = await db.collection<Bet>('bets')
                 .find(filter)
                 .skip(offset)
@@ -50,7 +50,7 @@ export default (router: Router, db: Db) => {
         })
 
     router.get('/bets/total', async (ctx: ExtendableContext) => {
-        const filters: any = allVersionsFilter(db)
+        const filters: any = await allVersionsFilter(db)
         const result: any[] = await db.collection<Bet>('bets').aggregate([
             {$match: filters},
             {$count: "lt"},
