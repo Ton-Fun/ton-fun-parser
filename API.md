@@ -143,9 +143,7 @@ curl -s https://parser.tonbot.fun/players | jq
 ]
 ```
 
-```shell
-curl -s https://parser.tonbot.fun/players/:version?orderBy=<orderBy>&sort=<sort> | jq
-```
+## GET `/players?orderBy=<orderBy>&sort=<sort>`
 
 * `version` - Version of game. Available values:
   * `1` 
@@ -163,6 +161,10 @@ curl -s https://parser.tonbot.fun/players/:version?orderBy=<orderBy>&sort=<sort>
 * `sort` - Available values:
   * `asc`
   * `desc`
+
+```shell
+curl -s https://parser.tonbot.fun/players/1 | jq
+```
 
 ```json
 [
