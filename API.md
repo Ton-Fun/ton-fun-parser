@@ -29,34 +29,28 @@ curl -s https://parser.tonbot.fun/state | jq
 ```
 
 ```json
-{
-  "1": {
-    "state": {
-      "_id": "6375a96b9621198ed0877820",
-      "version": "1",
-      "maxHash": "EjB9poAV6vXd6JM0Ca3c1KNhWEhRVlaqflcAwZc4Etk=",
-      "maxLt": 32759617000003,
-      "parseHash": "",
-      "parserLt": 0,
-      "parserTargetHash": "EjB9poAV6vXd6JM0Ca3c1KNhWEhRVlaqflcAwZc4Etk=",
-      "parserTargetLt": 32759617000003
-    },
+[
+  {
+    "version": "1",
+    "maxHash": "EjB9poAV6vXd6JM0Ca3c1KNhWEhRVlaqflcAwZc4Etk=",
+    "maxLt": 32759617000003,
+    "parseHash": "",
+    "parserLt": 0,
+    "parserTargetHash": "EjB9poAV6vXd6JM0Ca3c1KNhWEhRVlaqflcAwZc4Etk=",
+    "parserTargetLt": 32759617000003,
     "scraped": 6966
   },
-  "2": {
-    "state": {
-      "_id": "6375a96b9621198ed087781f",
-      "version": "2",
-      "maxHash": "CUz31ehG1efmVAofTPaCqdCj9N2MwPGVp9VFVstCRC0=",
-      "maxLt": 32915671000001,
-      "parseHash": "",
-      "parserLt": 0,
-      "parserTargetHash": "CUz31ehG1efmVAofTPaCqdCj9N2MwPGVp9VFVstCRC0=",
-      "parserTargetLt": 32915671000001
-    },
-    "scraped": 7811
+  {
+    "version": "2",
+    "maxHash": "9XZD0fgWKZkf8mCkyxxliK5HPMHMF6xsm7sW9uEja48=",
+    "maxLt": 32954972000001,
+    "parseHash": "",
+    "parserLt": 0,
+    "parserTargetHash": "9XZD0fgWKZkf8mCkyxxliK5HPMHMF6xsm7sW9uEja48=",
+    "parserTargetLt": 32954972000001,
+    "scraped": 7876
   }
-}
+]
 ```
 
 
