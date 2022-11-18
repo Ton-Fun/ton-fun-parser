@@ -1,16 +1,8 @@
 # Ton fun parser
 ## Up for development
-### Install
-```shell
-yarn install && yarn env
-```
-
 ```shell
 docker compose -f docker-compose.local.yaml --env-file .env.local up
-```
-
-### Start
-```shell
+yarn install && yarn env
 yarn start
 ```
 
