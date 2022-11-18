@@ -3,7 +3,6 @@ services:
 
   mongo:
     image: mongo:4.4.17
-    container_name: mongo
     restart: always
     command: ['--logpath', '/var/log/mongodb/mongo.log']
     ports:
@@ -18,6 +17,8 @@ services:
   mongo-express:
     image: mongo-express:1.0.0-alpha
     restart: always
+    depends_on:
+      - mongo
     ports:
       - ${MONGO_EXPRESS_PORT}:8081
     environment:

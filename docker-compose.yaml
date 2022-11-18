@@ -3,7 +3,6 @@ services:
 
   mongo:
     image: mongo:4.4.17
-    container_name: mongo
     restart: always
     command: ['--logpath', '/var/log/mongodb/mongo.log']
     volumes:
@@ -15,9 +14,8 @@ services:
     networks:
       - parser
 
-  tonFunParser:
+  ton-fun-parser:
     image: ghcr.io/kokkekpek/ton-fun-parser:latest
-    container_name: tonFunParser
     restart: always
     volumes:
       - ton-fun-parser-log:/app/log
