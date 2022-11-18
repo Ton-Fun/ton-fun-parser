@@ -1,4 +1,16 @@
 # API
+# Table of content
+* [health](#get-health)
+* [state](#get-state)
+* [summary](#get-summary)
+* [players](#get-players)
+* [players/:version](#get-playersversion)
+* [players/:address](#get-playeraddress)
+* [bets](#get-bets)
+* [bets/stream](#get-betsstream)
+* [bets/total](#get-betstotal)
+
+
 ## GET `/health`
 ```shell
 curl -s https://parser.tonbot.fun/health | jq
@@ -94,9 +106,12 @@ curl -s https://parser.tonbot.fun/summary | jq
 ```
 
 
-## GET `/players?orderBy=<orderBy>&sort=<sort>`
+## GET `/players`
+```shell
+curl -s https://parser.tonbot.fun/players?orderBy=betsValue&sort=desc | jq
+```
 
-* `orderBy` - Available values:
+* `orderBy` - optional. Available values:
   * `betsValue`
   * `winsValue`
   * `bets`
@@ -106,13 +121,9 @@ curl -s https://parser.tonbot.fun/summary | jq
   * `firstBetTimestamp`
   * `lastBetTimestamp`
   * `profit`
-* `sort` - Available values:
+* `sort` - optional. Available values:
   * `asc`
   * `desc`
-
-```shell
-curl -s https://parser.tonbot.fun/players | jq
-```
 
 ```json
 [
@@ -143,13 +154,17 @@ curl -s https://parser.tonbot.fun/players | jq
 ]
 ```
 
-## GET `/players?orderBy=<orderBy>&sort=<sort>`
+## GET `/players/:version`
+
+```shell
+curl -s https://parser.tonbot.fun/players/1?orderBy=betsValue&sort=desc | jq
+```
 
 * `version` - Version of game. Available values:
   * `1` 
   * `2` 
-* `orderBy` - Available values:
-  * `betsValue`
+* `orderBy` - Optional. Available values:
+  * `betsValue` - default
   * `winsValue`
   * `bets`
   * `wins`
@@ -158,13 +173,9 @@ curl -s https://parser.tonbot.fun/players | jq
   * `firstBetTimestamp`
   * `lastBetTimestamp`
   * `profit`
-* `sort` - Available values:
-  * `asc`
+* `sort` - Optional. Available values:
+  * `asc` - default
   * `desc`
-
-```shell
-curl -s https://parser.tonbot.fun/players/1 | jq
-```
 
 ```json
 [
@@ -198,11 +209,11 @@ curl -s https://parser.tonbot.fun/players/1 | jq
 
 ## GET `/player/:address`
 
-* `address` - Address of player
-
 ```shell
 curl -s https://parser.tonbot.fun/player/EQDGWh3jrNsAMChz0Xt7gS3MSaW6A-nXpjRMw8Jq3Whoj2hB | jq
 ```
+
+* `address` - Address of player wallet contract
 
 ```json
 {
@@ -242,15 +253,15 @@ curl -s https://parser.tonbot.fun/player/EQDGWh3jrNsAMChz0Xt7gS3MSaW6A-nXpjRMw8J
 ```
 
 
-## GET `/bets?offset=<offset>&limit=<limit>`
-
-Return bets in ordered by logical time. Use it if you want to just show bets. Response output may vary.
-* `offset` >= `0`
-* `limit` from `1` to `1000` by default
+## GET `/bets`
+Return bets in ordered by logical time. Use it if you want to just show bets. Response is not idempotent.
 
 ```shell
 curl -s "https://parser.tonbot.fun/bets?offset=0&limit=2" | jq
 ```
+
+* `offset` - Optional. Default is `0`
+* `limit` - Optional. Default value and in `.env` file. Maximum value in `.env` file
 
 ```json
 {
@@ -279,15 +290,15 @@ curl -s "https://parser.tonbot.fun/bets?offset=0&limit=2" | jq
 ```
 
 
-## GET `/bets/stream?offset=<offset>&limit=<limit>`
-
-Return bets in ordered by parser. Use it if you want to process bets. Response output same anytime.
-* `offset` >= `0`
-* `limit` from `1` to `1000` by default
+## GET `/bets/stream`
+Return bets in ordered by parser. Use it if you want to process bets. Response is not idempotent.
 
 ```shell
 curl -s "https://parser.tonbot.fun/bets/stream?offset=0&limit=2" | jq
 ```
+
+* `offset` - Optional. Default is `0`
+* `limit` - Optional. Default value and in `.env` file. Maximum value in `.env` file
 
 ```json
 {
