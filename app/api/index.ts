@@ -3,6 +3,7 @@ import Router from '@koa/router'
 import {Logger} from 'winston'
 import {Db, MongoClient} from 'mongodb'
 import {readInt} from '../utils/env'
+import headers from './headers'
 import health from './health'
 import state from './state'
 import summary from './summary'
@@ -13,11 +14,12 @@ const DEFAULT_PORT: number = 3000
 
 export default (logger: Logger, mongo: MongoClient): void => {
     const port: number = readInt(process.env.PORT, DEFAULT_PORT)
-    // const betsMaxLimit: number = readInt(process.env.BETS_MAX_LIMIT, 1000)
 
     const app: Koa = new Koa()
     const router: Router = new Router()
     const db: Db = mongo.db('parser')
+
+    headers(app)
 
     health(router)
     state(router, db)
