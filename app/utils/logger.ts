@@ -1,10 +1,10 @@
 import winston, {Logger} from 'winston'
 
-export default (): Logger => {
-    const info: string = 'log/parser.log'
-    const error: string = 'log/error.log'
-    const maxSize: number = 10 * 1024 * 1024 // 10 MB
+const INFO: string = 'log/parser.log'
+const ERROR: string = 'log/error.log'
+const MAX_SIZE: number = 10 * 1024 * 1024
 
+export default (): Logger => {
     return winston.createLogger({
         format: winston.format.combine(
             winston.format.timestamp(),
@@ -15,13 +15,13 @@ export default (): Logger => {
                 format: winston.format.simple()
             }),
             new winston.transports.File({
-                filename: info,
-                maxsize: maxSize
+                filename: INFO,
+                maxsize: MAX_SIZE
             }),
             new winston.transports.File({
-                filename: error,
+                filename: ERROR,
                 level: 'error',
-                maxsize: maxSize
+                maxsize: MAX_SIZE
             })
         ]
     })
