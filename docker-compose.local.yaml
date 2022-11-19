@@ -14,16 +14,6 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
 
-  mongo-express:
-    image: mongo-express:1.0.0-alpha
-    restart: always
-    depends_on:
-      - mongo
-    ports:
-      - ${MONGO_EXPRESS_PORT}:8081
-    environment:
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017
-
 volumes:
   ton-fun-parser-mongo-db:
   ton-fun-parser-mongo-log:
