@@ -41,4 +41,3 @@ jobs:
           port: 22
           username: root
           key: ${{ secrets.SSH_DEPLOY_PRIVATE_KEY }}
-

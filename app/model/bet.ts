@@ -1,11 +1,11 @@
-import {Long} from 'mongodb'
+import { Long } from 'mongodb'
 
-export type Bet = {
-    lt: Long
-    hash: string
-    time: Long
-    address: string
-    value: Long
-    win: boolean
-    version: string
+export interface Bet {
+  lt: Long
+  hash: string
+  time: Long
+  address: string
+  value: Long
+  win: boolean
+  version: string
 }

@@ -1,8 +1,8 @@
-import {ExtendableContext} from 'koa'
+import { ExtendableContext } from 'koa'
 import Router from '@koa/router'
 
-export default (router: Router) => {
-    router.get('/health', (ctx: ExtendableContext): void => {
-        ctx.body = {success: 'OK'}
-    })
+export default (router: Router): void => {
+  router.get('/health', (ctx: ExtendableContext): void => {
+    ctx.body = { success: 'OK' }
+  })
 }
