@@ -13,3 +13,7 @@ export function readInt(value: string | undefined, defaultValue: number = 0): nu
 export function readString(value: string | undefined, defaultValue: string = ''): string {
     return value ?? defaultValue
 }
+
+export function readBoolean(value: string | undefined): boolean {
+    return value === 'true'
+}

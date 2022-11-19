@@ -1,6 +1,6 @@
 import {Logger} from 'winston'
 import {MongoClient} from 'mongodb'
-import {readString} from './env'
+import {readString} from './util/env'
 
 const DEFAULT_HOST: string = 'localhost'
 const DEFAULT_PORT: string = '27017'

@@ -3,9 +3,9 @@ import {Db} from 'mongodb'
 import Joi from 'joi'
 import validator from 'koa-context-validator'
 import {ExtendableContext} from 'koa'
-import {Bet, ParserVersion} from '../types'
-import {allVersionsFilter, singleVersionFilter} from './utils/filter'
-import {parserVersions} from '../default'
+import {allVersions, singleVersion} from '../util/filter'
+import {Bet} from '../../model/bet'
+import {ParserVersion, parserVersions} from '../../model/state'
 
 export default (router: Router, db: Db) => {
     const DEFAULT_ORDER_BY: string = 'betsValue'
@@ -75,8 +75,8 @@ export default (router: Router, db: Db) => {
                 orderBy: Joi.string().valid(...validOrderBy),
                 sort: Joi.string().valid(...validSort)
             })
-        }), async (ctx: ExtendableContext) => {
-            const filters: any = await allVersionsFilter(db)
+        }), async (ctx: ExtendableContext): Promise<void> => {
+            const filters: any = await allVersions(db)
             const sorting: Sorting = getSorting(ctx)
             ctx.body = await getPlayers(db, filters, sorting)
         })
@@ -86,26 +86,27 @@ export default (router: Router, db: Db) => {
             params: Joi.object().keys({
                 version: Joi.string().valid(...parserVersions)
             })
-        }), async (ctx: ExtendableContext & RouterParamContext) => {
-            const filters: any = await singleVersionFilter(db, ctx.params.version as ParserVersion)
+        }), async (ctx: ExtendableContext & RouterParamContext): Promise<void> => {
+            const filters: any = await singleVersion(db, ctx.params.version as ParserVersion)
             const sorting: Sorting = getSorting(ctx)
             ctx.body = await getPlayers(db, filters, sorting)
         })
 
-    router.get('/player/:address', async (ctx: ExtendableContext & RouterParamContext) => {
-        const address: string = ctx.params.address
-        const filters: any = await allVersionsFilter(db)
-        const extendedFilters: any = {$and: [{address: {$eq: address}}, {...filters}]}
-        const sorting: Sorting = getSorting(ctx)
-        const players: any[] = await getPlayers(db, extendedFilters, sorting)
-        const bets: Bet[] = await db.collection<Bet>('bets')
-            .find<Bet>({address: {$eq: address}})
-            .filter(extendedFilters)
-            .project<Bet>({_id: 0})
-            .toArray()
-        ctx.body = {
-            player: players[0] ?? [],
-            bets
-        }
-    })
+    router.get('/player/:address',
+        async (ctx: ExtendableContext & RouterParamContext): Promise<void> => {
+            const address: string = ctx.params.address
+            const filters: any = await allVersions(db)
+            const extendedFilters: any = {$and: [{address: {$eq: address}}, {...filters}]}
+            const sorting: Sorting = getSorting(ctx)
+            const players: any[] = await getPlayers(db, extendedFilters, sorting)
+            const bets: Bet[] = await db.collection<Bet>('bets')
+                .find<Bet>({address: {$eq: address}})
+                .filter(extendedFilters)
+                .project<Bet>({_id: 0})
+                .toArray()
+            ctx.body = {
+                player: players[0] ?? [],
+                bets
+            }
+        })
 }

@@ -1,6 +1,6 @@
 import api from './api'
-import createLogger from './utils/logger'
-import createDatabaseClient from './utils/db'
+import createLogger from './logger/logger'
+import createDatabaseClient from './db'
 import {Logger} from 'winston'
 import * as dotenv from 'dotenv'
 import {MongoClient} from 'mongodb'

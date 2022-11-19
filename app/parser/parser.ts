@@ -1,9 +1,11 @@
-import {Collection, Db, Long, MongoClient} from 'mongodb'
+import {Db, Long, MongoClient} from 'mongodb'
 import {Address, TonClient, TonTransaction} from 'ton'
 import {Logger} from 'winston'
 import {delay} from 'ton/dist/utils/time'
-import {Bet, State} from '../types'
-import {defaultState} from '../default'
+import {getState, ParserVersion, State} from '../model/state'
+import {Bet} from '../model/bet'
+
+const BET_LOG: string = 'BET'
 
 export type ParserConfig = {
     logger: Logger
@@ -12,21 +14,17 @@ export type ParserConfig = {
     delay: number
     limit: number
     contract: Address
-    version: string
+    version: ParserVersion
     betsFromTransactions: (transactions: TonTransaction[], state: State) => Bet[]
 }
 
 export default async (config: ParserConfig): Promise<void> => {
     const client: TonClient = new TonClient({endpoint: config.endpoint})
-    const database: Db = config.mongo.db('parser')
-    const stateCollection: Collection<State> = database.collection(`state`)
-    const betsCollection: Collection<Bet> = database.collection('bets')
-    let state: State = await stateCollection.findOne({version: {$eq: config.version}}) ??
-        defaultState(config.version)
-    state.version = config.version
+    const db: Db = config.mongo.db('parser')
+    let state: State = await getState(db, config.version)
     let newState: State = {...state}
 
-    await betsCollection.createIndex({lt: 1}, {unique: true})
+    await db.collection<Bet>('bets').createIndex({lt: 1}, {unique: true})
 
     // noinspection InfiniteLoopJS
     while (true) {
@@ -56,8 +54,11 @@ export default async (config: ParserConfig): Promise<void> => {
 
         const bets: Bet[] = config.betsFromTransactions(transactions, state)
         bets.forEach((bet: Bet) => {
-            betsCollection.updateOne({lt: {$eq: bet.lt}}, {$set: bet}, {upsert: true})
-            config.logger.info('New bet', {data: bet})
+            db.collection<Bet>('bets').updateOne(
+                {lt: {$eq: bet.lt}},
+                {$set: bet}, {upsert: true}
+            )
+            config.logger.info(BET_LOG, {data: bet})
         })
 
         const maxTransaction: TonTransaction = transactions[0]
@@ -81,7 +82,10 @@ export default async (config: ParserConfig): Promise<void> => {
     async function updateState(): Promise<void> {
         if (JSON.stringify(state) !== JSON.stringify(newState)) {
             state = {...newState}
-            await stateCollection.updateOne({version: {$eq: config.version}}, {$set: state}, {upsert: true})
+            await db.collection<State>(`state`).updateOne(
+                {version: {$eq: config.version}},
+                {$set: state}, {upsert: true}
+            )
         }
     }
 }

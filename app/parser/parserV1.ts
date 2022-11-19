@@ -2,16 +2,17 @@ import {Long, MongoClient} from 'mongodb'
 import {Logger} from 'winston'
 import parser from './parser'
 import {TonTransaction} from 'ton'
-import {Bet, State} from '../types'
-import {readAddress, readInt, readString} from '../utils/env'
+import {readAddress, readInt, readString} from '../util/env'
 import BN from 'bn.js'
+import {ParserVersion, State} from '../model/state'
+import {Bet} from '../model/bet'
 
 const DEFAULT_DELAY: number = 200
 const DEFAULT_LIMIT: number = 50
 const MIN_BET_VALUE: number = 500_000_000
 
 export default async (logger: Logger, mongo: MongoClient) => {
-    const version: string = '1'
+    const version: ParserVersion = '1'
     await parser({
         logger,
         mongo,

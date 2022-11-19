@@ -1,9 +1,9 @@
 import Router, {RouterParamContext} from '@koa/router'
 import {Db} from 'mongodb'
-import {parserVersions} from '../default'
 import {ExtendableContext} from 'koa'
-import {Bet} from '../types'
-import {allVersionsFilter, singleVersionFilter} from './utils/filter'
+import {allVersions, singleVersion} from '../util/filter'
+import {Bet} from '../../model/bet'
+import {parserVersions} from '../../model/state'
 
 export default (router: Router, db: Db) => {
     type SummaryResult = {
@@ -39,11 +39,11 @@ export default (router: Router, db: Db) => {
             const players: number = (await db.collection<Bet>('bets')
                     .distinct('address', {version: {$eq: version}})
             ).length
-            const filters: any = await singleVersionFilter(db, version)
+            const filters: any = await singleVersion(db, version)
             results[version] = await getSummary(db, players, filters)
         }
         const players: number = (await db.collection<Bet>('bets').distinct('address')).length
-        const filters: any = await allVersionsFilter(db)
+        const filters: any = await allVersions(db)
         results['total'] = await getSummary(db, players, filters)
         ctx.body = results
     })
