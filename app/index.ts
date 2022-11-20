@@ -1,9 +1,9 @@
 import api from './api'
 import createLogger from './logger/index'
-import createDatabaseClient from './db'
+import createMongoClient from './db'
 import { Logger } from 'winston'
 import * as dotenv from 'dotenv'
-import { MongoClient } from 'mongodb'
+import { Db, MongoClient } from 'mongodb'
 import parserV1 from './parser/parserV1'
 import parserV2 from './parser/parserV2'
 import { LogInfo } from './logger/message'
@@ -14,10 +14,11 @@ async function main (): Promise<void> {
   const logger: Logger = createLogger()
   logger.info(LogInfo.INITIALIZATION)
 
-  const mongo: MongoClient = await createDatabaseClient(logger)
-  api(logger, mongo)
-  parserV1(logger, mongo).catch((e: any) => logger.error(e.stack))
-  parserV2(logger, mongo).catch((e: any) => logger.error(e.stack))
+  const mongo: MongoClient = await createMongoClient(logger)
+  const db: Db = mongo.db('parser')
+  api(logger, db)
+  parserV1(logger, db).catch((e: any) => logger.error(e.stack))
+  parserV2(logger, db).catch((e: any) => logger.error(e.stack))
 }
 
 main().catch(console.dir)

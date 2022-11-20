@@ -1,4 +1,4 @@
-import { Db, Long, MongoClient } from 'mongodb'
+import { Db, Long } from 'mongodb'
 import { Address, TonClient, TonTransaction } from 'ton'
 import { Logger } from 'winston'
 import { delay } from 'ton/dist/utils/time'
@@ -8,7 +8,7 @@ import { LogError, LogInfo } from '../logger/message'
 
 export interface ParserConfig {
   logger: Logger
-  mongo: MongoClient
+  db: Db
   endpoint: string
   delay: number
   limit: number
@@ -19,11 +19,10 @@ export interface ParserConfig {
 
 export default async (config: ParserConfig): Promise<void> => {
   const client: TonClient = new TonClient({ endpoint: config.endpoint })
-  const db: Db = config.mongo.db('parser')
-  let state: State = await getState(db, config.version)
+  let state: State = await getState(config.db, config.version)
   const newState: State = { ...state }
 
-  await db.collection<Bet>('bets').createIndex({ lt: 1 }, { unique: true })
+  await config.db.collection<Bet>('bets').createIndex({ lt: 1 }, { unique: true })
 
   // noinspection InfiniteLoopJS
   while (true) {
@@ -54,7 +53,7 @@ export default async (config: ParserConfig): Promise<void> => {
     const bets: Bet[] = config.betsFromTransactions(transactions, state)
     try {
       for (const bet of bets) {
-        await db.collection<Bet>('bets').updateOne(
+        await config.db.collection<Bet>('bets').updateOne(
           { lt: { $eq: bet.lt } },
           { $set: bet }, { upsert: true }
         )
@@ -85,7 +84,7 @@ export default async (config: ParserConfig): Promise<void> => {
   async function updateState (): Promise<void> {
     if (JSON.stringify(state) !== JSON.stringify(newState)) {
       state = { ...newState }
-      await db.collection<State>('state').updateOne(
+      await config.db.collection<State>('state').updateOne(
         { version: { $eq: config.version } },
         { $set: state }, { upsert: true }
       )

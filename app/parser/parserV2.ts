@@ -1,4 +1,4 @@
-import { Long, MongoClient } from 'mongodb'
+import { Db, Long } from 'mongodb'
 import { Logger } from 'winston'
 import parser from './parser'
 import { Address, Cell, Slice, TonTransaction } from 'ton'
@@ -11,12 +11,12 @@ import { Bet } from '../model/bet'
 const DEFAULT_DELAY: number = 200
 const DEFAULT_LIMIT: number = 50
 
-export default async (logger: Logger, mongo: MongoClient): Promise<void> => {
+export default async (logger: Logger, db: Db): Promise<void> => {
   const version: ParserVersion = '2'
   const echoContract: Address = readAddress(process.env.PARSER_V2_ECHO_ADDRESS)
   await parser({
     logger,
-    mongo,
+    db,
     endpoint: readString(process.env.PARSER_V2_ENDPOINT),
     delay: readInt(process.env.PARSER_V2_DELAY, DEFAULT_DELAY),
     limit: readInt(process.env.PARSER_V2_LIMIT, DEFAULT_LIMIT),
