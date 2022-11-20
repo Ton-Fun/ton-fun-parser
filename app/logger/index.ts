@@ -41,7 +41,5 @@ export default (): Logger => {
       )
     }))
   }
-  return winston.createLogger({
-    transports
-  })
+  return winston.createLogger({ transports })
 }

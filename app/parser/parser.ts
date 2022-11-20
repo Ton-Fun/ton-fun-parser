@@ -4,9 +4,7 @@ import { Logger } from 'winston'
 import { delay } from 'ton/dist/utils/time'
 import { getState, ParserVersion, State } from '../model/state'
 import { Bet } from '../model/bet'
-
-const BET_LOG: string = 'BET'
-const UPDATE_BET_ERROR_LOG: string = 'UPDATE_BET_ERROR'
+import { LogError, LogInfo } from '../logger/message'
 
 export interface ParserConfig {
   logger: Logger
@@ -60,10 +58,10 @@ export default async (config: ParserConfig): Promise<void> => {
           { lt: { $eq: bet.lt } },
           { $set: bet }, { upsert: true }
         )
-        config.logger.info(BET_LOG, { data: bet })
+        config.logger.info(LogInfo.BET, { data: bet })
       }
     } catch (e: any) {
-      config.logger.error(UPDATE_BET_ERROR_LOG, e)
+      config.logger.error(LogError.UPDATE_BET, e)
     }
 
     const maxTransaction: TonTransaction = transactions[0]
