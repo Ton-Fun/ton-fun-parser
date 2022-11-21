@@ -1,34 +1,38 @@
 import { Db, Long } from 'mongodb'
 import { Logger } from 'winston'
 import { parser } from './parser'
-import { TonTransaction } from 'ton'
-import { readAddress, readInt, readString } from '../util/env'
+import { Address, TonTransaction } from 'ton'
 import BN from 'bn.js'
 import { ParserVersion, State } from '../model/state'
 import { Bet } from '../model/bet'
 
-const DEFAULT_DELAY: number = 200
-const DEFAULT_LIMIT: number = 50
 const MIN_BET_VALUE: number = 500_000_000
 
-export async function parserV1 (logger: Logger, db: Db): Promise<void> {
+interface ParserV1Config {
+  endpoint: string
+  delay: number
+  limit: number
+  contract: Address
+}
+
+export async function parserV1 (logger: Logger, db: Db, config: ParserV1Config): Promise<void> {
   const version: ParserVersion = '1'
   await parser({
     logger,
     db,
-    endpoint: readString(process.env.PARSER_V2_ENDPOINT),
-    delay: readInt(process.env.PARSER_V1_DELAY, DEFAULT_DELAY),
-    limit: readInt(process.env.PARSER_V1_LIMIT, DEFAULT_LIMIT),
-    contract: readAddress(process.env.PARSER_V1_ADDRESS),
+    endpoint: config.endpoint,
+    delay: config.delay,
+    limit: config.limit,
+    contract: config.contract,
     version,
     betsFromTransactions: (transactions: TonTransaction[], state: State): Bet[] => {
-      const filtered: TonTransaction[] = transactions.filter((transaction: TonTransaction) => {
+      const filtered: TonTransaction[] = transactions.filter((transaction: TonTransaction): unknown => {
         return (transaction.inMessage?.value?.gte(new BN(MIN_BET_VALUE))) === true &&
           (new Long(transaction.id.lt)).gt(state.parserTargetLt)
       })
 
       const bets: Bet[] = []
-      filtered.forEach((transaction: TonTransaction) => {
+      filtered.forEach((transaction: TonTransaction): void => {
         const address: string = transaction.inMessage?.source?.toFriendly() as string
         bets.push({
           lt: new Long(transaction.id.lt),

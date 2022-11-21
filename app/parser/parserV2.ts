@@ -3,29 +3,32 @@ import { Logger } from 'winston'
 import { parser } from './parser'
 import { Address, Cell, Slice, TonTransaction } from 'ton'
 import { TonMessage } from 'ton/dist/client/TonTransaction'
-import { readAddress, readInt, readString } from '../util/env'
 import BN from 'bn.js'
 import { ParserVersion, State } from '../model/state'
 import { Bet } from '../model/bet'
 
-const DEFAULT_DELAY: number = 200
-const DEFAULT_LIMIT: number = 50
+interface ParserV2Config {
+  endpoint: string
+  delay: number
+  limit: number
+  contract: Address
+  echoContract: Address
+}
 
-export async function parserV2 (logger: Logger, db: Db): Promise<void> {
+export async function parserV2 (logger: Logger, db: Db, config: ParserV2Config): Promise<void> {
   const version: ParserVersion = '2'
-  const echoContract: Address = readAddress(process.env.PARSER_V2_ECHO_ADDRESS)
   await parser({
     logger,
     db,
-    endpoint: readString(process.env.PARSER_V2_ENDPOINT),
-    delay: readInt(process.env.PARSER_V2_DELAY, DEFAULT_DELAY),
-    limit: readInt(process.env.PARSER_V2_LIMIT, DEFAULT_LIMIT),
-    contract: readAddress(process.env.PARSER_V2_ADDRESS),
+    endpoint: config.endpoint,
+    delay: config.delay,
+    limit: config.limit,
+    contract: config.contract,
     version,
     betsFromTransactions: (transactions: TonTransaction[], state: State): Bet[] => {
-      const filtered: TonTransaction[] = transactions.filter((transaction: TonTransaction) => {
+      const filtered: TonTransaction[] = transactions.filter((transaction: TonTransaction): unknown => {
         const transactionFromEcho: boolean = transaction.inMessage?.source !== null &&
-          transaction.inMessage?.source.toFriendly() === echoContract.toFriendly() &&
+          transaction.inMessage?.source.toFriendly() === config.echoContract.toFriendly() &&
           (new Long(transaction.id.lt)).gt(state.parserTargetLt)
         if (!transactionFromEcho) {
           return false
@@ -41,7 +44,7 @@ export async function parserV2 (logger: Logger, db: Db): Promise<void> {
       })
 
       const bets: Bet[] = []
-      filtered.forEach((transaction: TonTransaction) => {
+      filtered.forEach((transaction: TonTransaction): void => {
         const transactionBody: TransactionBody = readTransactionBody(transaction)
         bets.push({
           lt: new Long(transaction.id.lt),

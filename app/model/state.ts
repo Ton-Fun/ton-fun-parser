@@ -1,8 +1,7 @@
 import { Db, Long } from 'mongodb'
 
-export type ParserVersion = '1' | '2'
-
-export const parserVersions: ParserVersion[] = ['1', '2']
+export const parserVersions = ['1', '2'] as const
+export type ParserVersion = typeof parserVersions[number]
 
 export interface State {
   maxLt: Long

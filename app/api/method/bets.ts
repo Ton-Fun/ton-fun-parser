@@ -1,25 +1,22 @@
 import Router, { RouterParamContext } from '@koa/router'
 import { Db } from 'mongodb'
-import { readInt } from '../../util/env'
 import validator from 'koa-context-validator'
 import Joi from 'joi'
 import { ExtendableContext } from 'koa'
 import { allVersions } from '../util/filter'
 import { Bet } from '../../model/bet'
 
-const BETS_MAX_LIMIT: number = readInt(process.env.BETS_MAX, 5000)
-
-export function bets (router: Router, db: Db): void {
+export function bets (router: Router, db: Db, betsMaxLimit: number): void {
   router.get('/bets',
     validator({
       query: Joi.object().keys({
         offset: Joi.number().integer().min(0),
-        limit: Joi.number().integer().min(0).max(BETS_MAX_LIMIT)
+        limit: Joi.number().integer().min(0).max(betsMaxLimit)
       })
     }),
     async (ctx: ExtendableContext & RouterParamContext) => {
       const offset: number = ctx.query.offset != null ? parseInt(ctx.query.offset.toString()) : 0
-      const limit: number = ctx.query.limit != null ? parseInt(ctx.query.limit.toString()) : BETS_MAX_LIMIT
+      const limit: number = ctx.query.limit != null ? parseInt(ctx.query.limit.toString()) : betsMaxLimit
       const filter: any = await allVersions(db)
       ctx.body = await db.collection<Bet>('bets')
         .find(filter)
@@ -34,12 +31,12 @@ export function bets (router: Router, db: Db): void {
     validator({
       query: Joi.object().keys({
         offset: Joi.number().integer().min(0),
-        limit: Joi.number().integer().min(0).max(BETS_MAX_LIMIT)
+        limit: Joi.number().integer().min(0).max(betsMaxLimit)
       })
     }),
     async (ctx: ExtendableContext & RouterParamContext) => {
       const offset: number = ctx.query.offset != null ? parseInt(ctx.query.offset.toString()) : 0
-      const limit: number = ctx.query.limit != null ? parseInt(ctx.query.limit.toString()) : BETS_MAX_LIMIT
+      const limit: number = ctx.query.limit != null ? parseInt(ctx.query.limit.toString()) : betsMaxLimit
       const filter: any = await allVersions(db)
       ctx.body = await db.collection<Bet>('bets')
         .find(filter)
