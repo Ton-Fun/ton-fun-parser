@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv'
 import { Db, MongoClient } from 'mongodb'
 import parserV1 from './parser/parserV1'
 import parserV2 from './parser/parserV2'
-import { LogInfo } from './logger/message'
+import { LogInfo } from './log'
 
 async function main (): Promise<void> {
   dotenv.config()
@@ -21,4 +21,7 @@ async function main (): Promise<void> {
   parserV2(logger, db).catch((e: any) => logger.error(e.stack))
 }
 
-main().catch(console.dir)
+main().catch((e: any) => {
+  console.dir(e)
+  process.exit()
+})

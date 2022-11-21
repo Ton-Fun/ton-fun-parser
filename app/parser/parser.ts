@@ -4,7 +4,7 @@ import { Logger } from 'winston'
 import { delay } from 'ton/dist/utils/time'
 import { getState, ParserVersion, State } from '../model/state'
 import { Bet } from '../model/bet'
-import { LogError, LogInfo } from '../logger/message'
+import { LogError, LogInfo } from '../log'
 
 export interface ParserConfig {
   logger: Logger
