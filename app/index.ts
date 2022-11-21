@@ -8,6 +8,7 @@ import { parserV1 } from './parser/parserV1'
 import { parserV2 } from './parser/parserV2'
 import { LogError, LogInfo } from './log'
 import { readInt, readString } from './util/env'
+import { killer } from './killer'
 
 const LOGGER_INFO: string = 'log/parser.log'
 const LOGGER_ERROR: string = 'log/error.log'
@@ -28,6 +29,8 @@ async function main (): Promise<void> {
     maxSize: LOGGER_MAX_SIZE
   })
   logger.info(LogInfo.STARTED)
+
+  killer(logger)
 
   const mongo: MongoClient = await createMongoClient({
     host: readString(process.env.MONGO_HOST, DEFAULT_MONGO_HOST),
