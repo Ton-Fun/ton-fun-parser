@@ -13,7 +13,7 @@ export interface MongoClientConfig {
   connectionAttempts: number
 }
 
-export default async function createMongoClient (config: MongoClientConfig, logger: Logger): Promise<MongoClient> {
+export async function createMongoClient (config: MongoClientConfig, logger: Logger): Promise<MongoClient> {
   const uri: string = `mongodb://${config.username}:${config.password}@${config.host}:${config.port}`
   const client: MongoClient = new MongoClient(uri)
 

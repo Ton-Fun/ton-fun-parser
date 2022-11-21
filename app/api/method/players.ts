@@ -7,7 +7,7 @@ import { allVersions, singleVersion } from '../util/filter'
 import { Bet } from '../../model/bet'
 import { ParserVersion, parserVersions } from '../../model/state'
 
-export default (router: Router, db: Db): void => {
+export function players (router: Router, db: Db): void {
   const DEFAULT_ORDER_BY: string = 'betsValue'
   const DEFAULT_SORT: string = 'asc'
 

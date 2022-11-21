@@ -9,7 +9,7 @@ import { Bet } from '../../model/bet'
 
 const BETS_MAX_LIMIT: number = readInt(process.env.BETS_MAX, 5000)
 
-export default (router: Router, db: Db): void => {
+export function bets (router: Router, db: Db): void {
   router.get('/bets',
     validator({
       query: Joi.object().keys({

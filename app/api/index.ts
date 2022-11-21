@@ -3,16 +3,16 @@ import Router from '@koa/router'
 import { Logger } from 'winston'
 import { Db } from 'mongodb'
 import { readInt } from '../util/env'
-import headers from './headers'
-import health from './method/health'
-import state from './method/state'
-import summary from './method/summary'
-import players from './method/players'
-import bets from './method/bets'
+import { headers } from './headers'
+import { health } from './method/health'
+import { state } from './method/state'
+import { summary } from './method/summary'
+import { players } from './method/players'
+import { bets } from './method/bets'
 
 const DEFAULT_PORT: number = 3000
 
-export default (logger: Logger, db: Db): void => {
+export function api (logger: Logger, db: Db): void {
   const port: number = readInt(process.env.PORT, DEFAULT_PORT)
 
   const app: Koa = new Koa()

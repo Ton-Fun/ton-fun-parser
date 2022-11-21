@@ -1,6 +1,6 @@
 import { Db, Long } from 'mongodb'
 import { Logger } from 'winston'
-import parser from './parser'
+import { parser } from './parser'
 import { TonTransaction } from 'ton'
 import { readAddress, readInt, readString } from '../util/env'
 import BN from 'bn.js'
@@ -11,7 +11,7 @@ const DEFAULT_DELAY: number = 200
 const DEFAULT_LIMIT: number = 50
 const MIN_BET_VALUE: number = 500_000_000
 
-export default async (logger: Logger, db: Db): Promise<void> => {
+export async function parserV1 (logger: Logger, db: Db): Promise<void> {
   const version: ParserVersion = '1'
   await parser({
     logger,

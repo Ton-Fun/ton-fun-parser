@@ -4,7 +4,7 @@ import { ExtendableContext } from 'koa'
 import Router from '@koa/router'
 import { Db } from 'mongodb'
 
-export default (router: Router, db: Db): void => {
+export function state (router: Router, db: Db): void {
   type StateResult = State & {
     scraped: number
   }

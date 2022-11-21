@@ -12,7 +12,7 @@ export interface LoggerConfig {
   maxSize: number
 }
 
-export default function createLogger (config: LoggerConfig): Logger {
+export function createLogger (config: LoggerConfig): Logger {
   const consoleLog: string = readString(process.env.CONSOLE_LOG)
   const file: winston.Logform.Format = winston.format.combine(
     winston.format.timestamp(),

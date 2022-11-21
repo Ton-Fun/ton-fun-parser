@@ -1,6 +1,6 @@
 import { Db, Long } from 'mongodb'
 import { Logger } from 'winston'
-import parser from './parser'
+import { parser } from './parser'
 import { Address, Cell, Slice, TonTransaction } from 'ton'
 import { TonMessage } from 'ton/dist/client/TonTransaction'
 import { readAddress, readInt, readString } from '../util/env'
@@ -11,7 +11,7 @@ import { Bet } from '../model/bet'
 const DEFAULT_DELAY: number = 200
 const DEFAULT_LIMIT: number = 50
 
-export default async (logger: Logger, db: Db): Promise<void> => {
+export async function parserV2 (logger: Logger, db: Db): Promise<void> {
   const version: ParserVersion = '2'
   const echoContract: Address = readAddress(process.env.PARSER_V2_ECHO_ADDRESS)
   await parser({

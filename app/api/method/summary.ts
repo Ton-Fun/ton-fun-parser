@@ -5,7 +5,7 @@ import { allVersions, singleVersion } from '../util/filter'
 import { Bet } from '../../model/bet'
 import { parserVersions } from '../../model/state'
 
-export default (router: Router, db: Db): void => {
+export function summary (router: Router, db: Db): void {
   interface SummaryResult {
     players: number
   }

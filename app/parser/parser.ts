@@ -17,7 +17,7 @@ export interface ParserConfig {
   betsFromTransactions: (transactions: TonTransaction[], state: State) => Bet[]
 }
 
-export default async (config: ParserConfig): Promise<void> => {
+export async function parser (config: ParserConfig): Promise<void> {
   const client: TonClient = new TonClient({ endpoint: config.endpoint })
   let state: State = await getState(config.db, config.version)
   const newState: State = { ...state }
