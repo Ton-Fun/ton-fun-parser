@@ -9,6 +9,7 @@ import { state } from './method/state'
 import { summary } from './method/summary'
 import { players } from './method/players'
 import { bets } from './method/bets'
+import { LogError } from '../log'
 
 const DEFAULT_PORT: number = 3000
 
@@ -29,6 +30,6 @@ export function api (logger: Logger, db: Db): void {
   try {
     app.use(router.middleware()).listen(port)
   } catch (e: any) {
-    logger.error(e.stack)
+    logger.error(LogError.API_INITIALIZATION_FAILED, { data: e })
   }
 }

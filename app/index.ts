@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv'
 import { Db, MongoClient } from 'mongodb'
 import { parserV1 } from './parser/parserV1'
 import { parserV2 } from './parser/parserV2'
-import { LogInfo } from './log'
+import { LogError, LogInfo } from './log'
 import { readInt, readString } from './util/env'
 
 const LOGGER_INFO: string = 'log/parser.log'
@@ -40,8 +40,8 @@ async function main (): Promise<void> {
   logger.info(LogInfo.INITIALIZED)
 
   api(logger, db)
-  parserV1(logger, db).catch((e: any) => logger.error(e.stack))
-  parserV2(logger, db).catch((e: any) => logger.error(e.stack))
+  parserV1(logger, db).catch((e: any) => logger.error(LogError.PARSER_FAILED, { data: e }))
+  parserV2(logger, db).catch((e: any) => logger.error(LogError.PARSER_FAILED, { data: e }))
 }
 
 main().catch((e: any) => {

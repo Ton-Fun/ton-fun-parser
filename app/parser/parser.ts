@@ -60,7 +60,7 @@ export async function parser (config: ParserConfig): Promise<void> {
         config.logger.info(LogInfo.BET, { data: bet })
       }
     } catch (e: any) {
-      config.logger.error(LogError.UPDATE_BET, e)
+      config.logger.error(LogError.UPDATE_BET_FAILED, e)
     }
 
     const maxTransaction: TonTransaction = transactions[0]
