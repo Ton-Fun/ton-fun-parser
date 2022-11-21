@@ -30,7 +30,7 @@ export async function parser (config: ParserConfig): Promise<void> {
       await parse()
       await updateState()
     } catch (e: any) {
-      config.logger.error(e.stack)
+      config.logger.error(LogError.PARSING_FAILED, { data: e })
     }
     await delay(config.delay)
   }

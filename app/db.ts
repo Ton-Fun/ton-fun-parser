@@ -1,9 +1,9 @@
 import { Logger } from 'winston'
 import { MongoClient } from 'mongodb'
 
-const MONGO_CONNECTION_FAILED: string = 'MONGO_CONNECTION_FAILED'
-const MONGO_CONNECTION_RETRY: string = 'MONGO_CONNECTION_RETRY'
-const CANT_CONNECT_TO_MONGO: string = 'Can\'t connect to MongoDB'
+const MONGO_CONNECTION_FAILED: string = 'MONGO CONNECTION FAILED'
+const MONGO_CONNECTION_RETRY: string = 'MONGO CONNECTION RETRY'
+const CANT_CONNECT_TO_MONGO: string = 'CANT CONNECT TON MONGO'
 
 export interface MongoClientConfig {
   host: string
