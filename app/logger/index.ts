@@ -6,11 +6,13 @@ import { consolePrint } from './format/consolePrint'
 import { readString } from '../util/env'
 import * as Transport from 'winston-transport'
 
-const INFO: string = 'log/parser.log'
-const ERROR: string = 'log/error.log'
-const MAX_SIZE: number = 10 * 1024 * 1024
+export interface LoggerConfig {
+  info: string
+  error: string
+  maxSize: number
+}
 
-export default (): Logger => {
+export default function createLogger (config: LoggerConfig): Logger {
   const consoleLog: string = readString(process.env.CONSOLE_LOG)
   const file: winston.Logform.Format = winston.format.combine(
     winston.format.timestamp(),
@@ -19,13 +21,13 @@ export default (): Logger => {
   const transports: Transport[] = [
     new winston.transports.File({
       format: file,
-      filename: INFO,
-      maxsize: MAX_SIZE
+      filename: config.info,
+      maxsize: config.maxSize
     }),
     new winston.transports.File({
       format: file,
-      filename: ERROR,
-      maxsize: MAX_SIZE,
+      filename: config.error,
+      maxsize: config.maxSize,
       level: 'error'
     })
   ]

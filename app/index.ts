@@ -11,7 +11,11 @@ import { LogInfo } from './log'
 async function main (): Promise<void> {
   dotenv.config()
 
-  const logger: Logger = createLogger()
+  const logger: Logger = createLogger({
+    info: 'log/parser.log',
+    error: 'log/error.log',
+    maxSize: 10 * 1024 * 1024
+  })
   logger.info(LogInfo.INITIALIZATION)
 
   const mongo: MongoClient = await createMongoClient(logger)
