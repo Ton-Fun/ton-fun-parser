@@ -1,5 +1,6 @@
 export enum LogInfo {
-  INITIALIZATION = 'INITIALIZATION',
+  STARTED = 'STARTED',
+  INITIALIZED = 'INITIALIZED',
   BET = 'BET'
 }
 
