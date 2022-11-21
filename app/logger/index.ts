@@ -3,17 +3,16 @@ import { prettifyTimestamp } from './format/prettifyTimestamp'
 import { grayTimestamp } from './format/grayTimestamp'
 import { levelUpperCase } from './format/levelUpperCase'
 import { consolePrint } from './format/consolePrint'
-import { readString } from '../util/env'
 import * as Transport from 'winston-transport'
 
 export interface LoggerConfig {
+  console: boolean
   info: string
   error: string
   maxSize: number
 }
 
 export function createLogger (config: LoggerConfig): Logger {
-  const consoleLog: string = readString(process.env.CONSOLE_LOG)
   const file: winston.Logform.Format = winston.format.combine(
     winston.format.timestamp(),
     winston.format.json()
@@ -31,7 +30,7 @@ export function createLogger (config: LoggerConfig): Logger {
       level: 'error'
     })
   ]
-  if (consoleLog != null) {
+  if (config.console) {
     transports.push(new winston.transports.Console({
       format: winston.format.combine(
         levelUpperCase(),

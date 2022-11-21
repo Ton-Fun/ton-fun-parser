@@ -7,12 +7,13 @@ import { Db, MongoClient } from 'mongodb'
 import { parserV1 } from './parser/parserV1'
 import { parserV2 } from './parser/parserV2'
 import { LogError, LogInfo } from './log'
-import { readInt, readString } from './util/env'
+import { readBoolean, readInt, readString } from './util/env'
 import { killer } from './killer'
 
-const LOGGER_INFO: string = 'log/parser.log'
-const LOGGER_ERROR: string = 'log/error.log'
-const LOGGER_MAX_SIZE: number = 10 * 1024 * 1024
+const DEFAULT_LOGGER_CONSOLE: boolean = true
+const DEFAULT_LOGGER_INFO: string = 'log/parser.log'
+const DEFAULT_LOGGER_ERROR: string = 'log/error.log'
+const DEFAULT_LOGGER_MAX_SIZE: number = 10 * 1024 * 1024
 
 const DEFAULT_MONGO_HOST: string = 'localhost'
 const DEFAULT_MONGO_PORT: string = '27017'
@@ -24,9 +25,10 @@ async function main (): Promise<void> {
   dotenv.config()
 
   const logger: Logger = createLogger({
-    info: LOGGER_INFO,
-    error: LOGGER_ERROR,
-    maxSize: LOGGER_MAX_SIZE
+    console: readBoolean(process.env.LOGGER_CONSOLE, DEFAULT_LOGGER_CONSOLE),
+    info: readString(process.env.LOGGER_INFO, DEFAULT_LOGGER_INFO),
+    error: readString(process.env.LOGGER_ERROR, DEFAULT_LOGGER_ERROR),
+    maxSize: readInt(process.env.LOGGER_MAX_SIZE, DEFAULT_LOGGER_MAX_SIZE)
   })
   logger.info(LogInfo.STARTED)
 
