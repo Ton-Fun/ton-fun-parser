@@ -15,7 +15,7 @@
 ## GET `/health`
 
 ```shell
-curl -s https://parser.tonbot.fun/health | jq
+curl -s https://parser.ton-lotto.fun/health | jq
 ```
 
 ```json
@@ -27,7 +27,7 @@ curl -s https://parser.tonbot.fun/health | jq
 ## GET `/state`
 
 ```shell
-curl -s https://parser.tonbot.fun/state | jq
+curl -s https://parser.ton-lotto.fun/state | jq
 ```
 
 ```json
@@ -58,7 +58,7 @@ curl -s https://parser.tonbot.fun/state | jq
 ## GET `/summary`
 
 ```shell
-curl -s https://parser.tonbot.fun/summary | jq
+curl -s https://parser.ton-lotto.fun/summary | jq
 ```
 
 ```json
@@ -102,7 +102,7 @@ curl -s https://parser.tonbot.fun/summary | jq
 ## GET `/players`
 
 ```shell
-curl -s https://parser.tonbot.fun/players?orderBy=betsValue&sort=desc | jq
+curl -s https://parser.ton-lotto.fun/players?orderBy=betsValue&sort=desc | jq
 ```
 
 - `orderBy` - optional. Available values:
@@ -151,7 +151,7 @@ curl -s https://parser.tonbot.fun/players?orderBy=betsValue&sort=desc | jq
 ## GET `/players/:version`
 
 ```shell
-curl -s https://parser.tonbot.fun/players/1?orderBy=betsValue&sort=desc | jq
+curl -s https://parser.ton-lotto.fun/players/1?orderBy=betsValue&sort=desc | jq
 ```
 
 - `version` - Version of game. Available values:
@@ -203,7 +203,7 @@ curl -s https://parser.tonbot.fun/players/1?orderBy=betsValue&sort=desc | jq
 ## GET `/player/:address`
 
 ```shell
-curl -s https://parser.tonbot.fun/player/EQDGWh3jrNsAMChz0Xt7gS3MSaW6A-nXpjRMw8Jq3Whoj2hB | jq
+curl -s https://parser.ton-lotto.fun/player/EQDGWh3jrNsAMChz0Xt7gS3MSaW6A-nXpjRMw8Jq3Whoj2hB | jq
 ```
 
 - `address` - Address of player wallet contract
@@ -250,7 +250,7 @@ curl -s https://parser.tonbot.fun/player/EQDGWh3jrNsAMChz0Xt7gS3MSaW6A-nXpjRMw8J
 Return bets in ordered by logical time. Use it if you want to just show bets. Response is not idempotent.
 
 ```shell
-curl -s "https://parser.tonbot.fun/bets?offset=0&limit=2" | jq
+curl -s "https://parser.ton-lotto.fun/bets?offset=0&limit=2" | jq
 ```
 
 - `offset` - Optional. Default is `0`
@@ -287,7 +287,7 @@ curl -s "https://parser.tonbot.fun/bets?offset=0&limit=2" | jq
 Return bets in ordered by parser. Use it if you want to process bets. Response is not idempotent.
 
 ```shell
-curl -s "https://parser.tonbot.fun/bets/stream?offset=0&limit=2" | jq
+curl -s "https://parser.ton-lotto.fun/bets/stream?offset=0&limit=2" | jq
 ```
 
 - `offset` - Optional. Default is `0`
@@ -322,7 +322,7 @@ curl -s "https://parser.tonbot.fun/bets/stream?offset=0&limit=2" | jq
 ## GET `/bets/total`
 
 ```shell
-curl -s https://parser.tonbot.fun/bets/total | jq
+curl -s https://parser.ton-lotto.fun/bets/total | jq
 ```
 
 ```json

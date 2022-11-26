@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  HOST: tonbot.fun
+  HOST: ton-lotto.fun
 
 jobs:
   deploy:
